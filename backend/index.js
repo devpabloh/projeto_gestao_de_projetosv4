@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 
-// Carrega o .env e verifica se houve erro
 const result = dotenv.config();
 if (result.error) {
     console.error('Erro ao carregar o .env:', result.error);
@@ -8,7 +7,6 @@ if (result.error) {
     console.log('Arquivo .env carregado com sucesso');
 }
 
-// Resto do código...
 import { errorHandler } from './middlewares/errorHandler.js';
 import express from "express";
 import bodyParser from "body-parser";

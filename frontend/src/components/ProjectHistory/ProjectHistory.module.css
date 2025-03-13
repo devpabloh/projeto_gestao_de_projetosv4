@@ -135,7 +135,7 @@
     color: #777;
 }
 
-/* Responsividade */
+
 @media (max-width: 768px) {
     .filterContainer {
         flex-direction: column;

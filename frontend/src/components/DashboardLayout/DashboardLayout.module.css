@@ -94,7 +94,6 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Menu Hamburguer */
 .menuButton {
     display: none;
     position: fixed;
@@ -132,7 +131,6 @@
     display: none;
 }
 
-/* Media query para dispositivos móveis e tablets */
 @media (max-width: 768px) {
     .menuButton {
         display: flex;
@@ -165,7 +163,6 @@
     }
 }
 
-/* Ajustes específicos para telas muito pequenas */
 @media (max-width: 320px) {
     .dashboardContainer {
         flex-direction: column;

@@ -35,34 +35,33 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
             return <p className={styles.noChanges}>Não há detalhes de alterações disponíveis.</p>;
         }
 
-        // Filtrar apenas os campos que realmente foram alterados
+        
         const changedFieldEntries = Object.entries(historyItem.changedFields).filter(([_, values]) => {
-            // Se não tem valor antigo, mas tem valor novo, é um campo que foi adicionado
+            
             if (!('old' in values) && 'new' in values && values.new !== null && values.new !== '') {
                 return true;
             }
             
-            // Se tem ambos os valores (antigo e novo), verificar se são diferentes
             if ('old' in values && 'new' in values) {
-                // Melhor comparação para arrays
+                
                 if (Array.isArray(values.old) && Array.isArray(values.new)) {
-                    // Verificar se os arrays têm o mesmo tamanho
+                    
                     if (values.old.length !== values.new.length) {
                         return true;
                     }
                     
-                    // Verificar se todos os elementos são iguais
+                    
                     for (let i = 0; i < values.old.length; i++) {
                         if (values.old[i] !== values.new[i]) {
                             return true;
                         }
                     }
                     
-                    // Arrays são iguais
+                    
                     return false;
                 }
                 
-                // Para outros tipos de valores, comparação direta
+                
                 return values.old !== values.new;
             }
             
@@ -85,7 +84,7 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
                     </thead>
                     <tbody>
                         {changedFieldEntries.map(([field, values]) => {
-                            // Verificar se é um campo novo (sem valor anterior)
+                            
                             const isNewField = !values.old;
                             
                             return (
@@ -109,17 +108,17 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
     };
 
     const formatFieldName = (fieldName) => {
-        // Verificar se o campo pertence a um modelo relacionado (contém um ponto)
+        
         const parts = fieldName.split('.');
         let modelPrefix = '';
         let actualFieldName = fieldName;
         
         if (parts.length > 1) {
-            // É um campo de modelo relacionado
+            
             const modelName = parts[0];
             actualFieldName = parts[1];
             
-            // Mapear prefixos de modelos para nomes amigáveis
+            
             const modelMap = {
                 'tests': 'Testes',
                 'environments': 'Ambiente',
@@ -132,7 +131,7 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
             modelPrefix = modelMap[modelName] ? `${modelMap[modelName]} - ` : '';
         }
         
-        // Mapeamento de nomes de campos para exibição mais amigável
+        
         const fieldMap = {
             // Campos do projeto principal
             projectName: 'Nome do Projeto',
@@ -191,20 +190,17 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
     };
 
     const formatFieldValue = (value) => {
-        // Remover o log de depuração
-        // console.log('Tipo do valor:', typeof value, 'Valor:', value);
         
-        // Verificar se o valor é null, undefined ou uma string vazia
         if (value === null || value === undefined || value === '') {
             return <span className={styles.nullValue}>Não informado</span>;
         }
 
-        // O resto da função permanece igual
+        
         if (typeof value === 'boolean') {
             return value ? 'Sim' : 'Não';
         }
 
-        // Melhor tratamento para datas
+        
         if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)) && value.includes('-'))) {
             try {
                 return formatDate(value);
@@ -214,7 +210,7 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
             }
         }
 
-        // Tratamento para arrays
+        
         if (Array.isArray(value)) {
             if (value.length === 0) {
                 return <span className={styles.nullValue}>Lista vazia</span>;
@@ -228,7 +224,7 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
             );
         }
 
-        // Tratamento para objetos
+        
         if (typeof value === 'object') {
             try {
                 return <pre className={styles.jsonValue}>{JSON.stringify(value, null, 2)}</pre>;
@@ -238,7 +234,7 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
             }
         }
 
-        // Para strings e números
+        
         return String(value);
     };
 

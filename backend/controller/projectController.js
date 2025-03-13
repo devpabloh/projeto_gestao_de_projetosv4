@@ -14,10 +14,10 @@ export async function createProject(requisicao, resposta) {
         console.log('Received data:', requisicao.body);
         console.log('User ID:', userId);
 
-        // Criar uma cópia dos dados para manipulação
+        
         const formData = { ...requisicao.body };
 
-        // Converter campos booleanos
+        
         if (formData.hasDocumentation === 'sim') formData.hasDocumentation = true;
         else if (formData.hasDocumentation === 'não' || formData.hasDocumentation === 'nao') formData.hasDocumentation = false;
         
@@ -30,7 +30,7 @@ export async function createProject(requisicao, resposta) {
         if (!formData.updatingTechnicalDocumentation || formData.updatingTechnicalDocumentation === '') {
             formData.updatingTechnicalDocumentation = null;
         } else {
-            // Tentar converter para data válida
+            
             try {
                 formData.updatingTechnicalDocumentation = new Date(formData.updatingTechnicalDocumentation);
                 if (isNaN(formData.updatingTechnicalDocumentation)) {
@@ -44,7 +44,7 @@ export async function createProject(requisicao, resposta) {
         if (!formData.updatingFunctionalDocumentation || formData.updatingFunctionalDocumentation === '') {
             formData.updatingFunctionalDocumentation = null;
         } else {
-            // Tentar converter para data válida
+            
             try {
                 formData.updatingFunctionalDocumentation = new Date(formData.updatingFunctionalDocumentation);
                 if (isNaN(formData.updatingFunctionalDocumentation)) {
@@ -56,7 +56,7 @@ export async function createProject(requisicao, resposta) {
         }
         
         
-        // Criar o projeto principal usando formData em vez de requisicao.body
+        
         const project = await Project.create({
             userId,
             projectName: formData.projectName,
@@ -69,7 +69,7 @@ export async function createProject(requisicao, resposta) {
             documentationType: formData.documentationType
         });
         
-        // Criar registro de testes
+        
         await Test.create({
             projectId: project.id,
             carriedOutTests: formData.carriedOutTests,
@@ -79,7 +79,7 @@ export async function createProject(requisicao, resposta) {
             testingToolsUsed: formData.testingToolsUsed
         });
         
-        // Criar registro de ambiente
+        
         await Environment.create({
             projectId: project.id,
             developmentEnvironment: formData.developmentEnvironment,
@@ -88,7 +88,7 @@ export async function createProject(requisicao, resposta) {
             deploymentEnvironmentNotes: formData.deploymentEnvironmentNotes
         });
         
-        // Criar registro de documentação
+        
         await Documentation.create({
             projectId: project.id,
             technicalDocumentation: formData.technicalDocumentation,
@@ -101,7 +101,7 @@ export async function createProject(requisicao, resposta) {
             updateFunctionalVersion: formData.updateFunctionalVersion
         });
         
-        // Criar registro de equipe
+        
         await Team.create({
             projectId: project.id,
             technicalLeaderName: formData.technicalLeaderName,
@@ -111,7 +111,7 @@ export async function createProject(requisicao, resposta) {
             supportPeriod: formData.supportPeriod
         });
         
-        // Criar registro de segurança
+        
         await Security.create({
             projectId: project.id,
             securityMeasures: formData.securityMeasures,
@@ -122,7 +122,7 @@ export async function createProject(requisicao, resposta) {
             otherCompliance: formData.otherCompliance
         });
         
-        // Criar registro de informações adicionais
+    
         await AdditionalInfo.create({
             projectId: project.id,
             challengesFaced: formData.challengesFaced,
@@ -130,24 +130,24 @@ export async function createProject(requisicao, resposta) {
             additionalComments: formData.additionalComments
         });
         
-        // Buscar o nome do usuário no banco de dados
+        
         const user = await User.findByPk(userId);
         if (!user) {
             throw new Error("Usuário não encontrado");
         }
         
-        // Registrar no histórico
+        
         await ProjectHistory.create({
             userId: userId,
             projectId: project.id,
             projectName: formData.projectName,
-            userName: user.name, // Usar o nome do usuário do banco de dados
+            userName: user.name, 
             actionType: 'create',
             changedFields: null,
             timestamp: new Date()
         });
 
-        // Buscar o projeto completo com todas as relações
+        
         const completeProject = await Project.findOne({
             where: { id: project.id },
             include: [
@@ -184,13 +184,13 @@ export async function listProjects(requisicao, resposta) {
         if (requisicao.user.role === 'admin') {
             projects = await Project.findAll({
                 include: includes,
-                distinct: true // Add distinct to prevent duplicate records
+                distinct: true 
             });
         } else {
             projects = await Project.findAll({
                 where: { userId: requisicao.user.id },
                 include: includes,
-                distinct: true // Add distinct to prevent duplicate records
+                distinct: true 
             });
         }
         return resposta.json(projects);
@@ -228,14 +228,14 @@ export async function updateProject(requisicao, resposta) {
             return resposta.status(403).json({ message: "Acesso negado, não é o proprietário do projeto." });
         }
 
-        // Capturar valores antigos antes da atualização
+        
         const oldValues = {};
         const newValues = {};
         const changedFields = {};
         
-        // Comparar valores antigos e novos para o projeto principal
+        
         const projectFields = ['projectName', 'projectDescription', 'responsibleFillingOut', 'responsibleContact', 
-                              'fillingDate', 'developmentPhase', 'hasDocumentation', 'documentationType'];
+        'fillingDate', 'developmentPhase', 'hasDocumentation', 'documentationType'];
         
         projectFields.forEach(key => {
             if (requisicao.body[key] !== undefined && project[key] !== requisicao.body[key]) {
@@ -248,12 +248,12 @@ export async function updateProject(requisicao, resposta) {
             }
         });
         
-        // Função auxiliar para comparar e registrar mudanças em modelos relacionados
+        
         const compareAndTrackChanges = (modelName, modelObj, requestData) => {
             if (!modelObj) return;
             
             Object.keys(modelObj.dataValues).forEach(key => {
-                // Ignorar campos de metadados e IDs
+                
                 if (['id', 'createdAt', 'updatedAt', 'projectId'].includes(key)) return;
                 
                 if (requestData[key] !== undefined && modelObj[key] !== requestData[key]) {
@@ -266,7 +266,7 @@ export async function updateProject(requisicao, resposta) {
             });
         };
         
-        // Comparar e registrar mudanças em todos os modelos relacionados
+        
         if (project.tests) compareAndTrackChanges('tests', project.tests, requisicao.body);
         if (project.environments) compareAndTrackChanges('environments', project.environments, requisicao.body);
         if (project.documentations) compareAndTrackChanges('documentations', project.documentations, requisicao.body);
@@ -274,7 +274,7 @@ export async function updateProject(requisicao, resposta) {
         if (project.security) compareAndTrackChanges('security', project.security, requisicao.body);
         if (project.additionalInfos) compareAndTrackChanges('additionalInfos', project.additionalInfos, requisicao.body);
 
-        // Atualizar o projeto principal
+        
         await project.update({
             projectName: requisicao.body.projectName || project.projectName,
             projectDescription: requisicao.body.projectDescription || project.projectDescription,
@@ -286,7 +286,7 @@ export async function updateProject(requisicao, resposta) {
             documentationType: requisicao.body.documentationType || project.documentationType
         });
 
-        // Atualizar testes
+        
         if (project.tests) {
             await project.tests.update({
                 carriedOutTests: requisicao.body.carriedOutTests || project.tests.carriedOutTests,
@@ -297,7 +297,7 @@ export async function updateProject(requisicao, resposta) {
             });
         }
 
-        // Atualizar ambiente
+        
         if (project.environments) {
             await project.environments.update({
                 developmentEnvironment: requisicao.body.developmentEnvironment || project.environments.developmentEnvironment,
@@ -307,7 +307,7 @@ export async function updateProject(requisicao, resposta) {
             });
         }
 
-        // Atualizar documentação
+        
         if (project.documentations) {
             await project.documentations.update({
                 technicalDocumentation: requisicao.body.technicalDocumentation || project.documentations.technicalDocumentation,
@@ -332,7 +332,7 @@ export async function updateProject(requisicao, resposta) {
             });
         }
 
-        // Atualizar segurança
+        
         if (project.security) {
             await project.security.update({
                 securityMeasures: requisicao.body.securityMeasures !== undefined ? requisicao.body.securityMeasures : project.security.securityMeasures,
@@ -344,7 +344,7 @@ export async function updateProject(requisicao, resposta) {
             });
         }
 
-        // Atualizar informações adicionais
+        
         if (project.additionalInfos) {
             await project.additionalInfos.update({
                 challengesFaced: requisicao.body.challengesFaced || project.additionalInfos.challengesFaced,
@@ -353,9 +353,9 @@ export async function updateProject(requisicao, resposta) {
             });
         }
         
-        // Registrar no histórico apenas se houve mudanças
+        
         if (Object.keys(changedFields).length > 0) {
-            // Buscar o nome do usuário no banco de dados
+            
             const user = await User.findByPk(userId);
             if (!user) {
                 throw new Error("Usuário não encontrado");
@@ -365,14 +365,14 @@ export async function updateProject(requisicao, resposta) {
                 userId: userId,
                 projectId: projectId,
                 projectName: project.projectName,
-                userName: user.name, // Usar o nome do usuário do banco de dados
+                userName: user.name, 
                 actionType: 'update',
                 changedFields: changedFields,
                 timestamp: new Date()
             });
         }
         
-        // Buscar o projeto atualizado com todas as relações para retornar
+        
         const updatedProject = await Project.findOne({
             where: { id: projectId },
             include: [
@@ -404,12 +404,12 @@ export async function deleteProject(requisicao, resposta) {
             return resposta.status(404).json({ message: "O projeto não foi encontrado." });
         }
 
-        // Correção: Comparar project.userId, não projectId
+        
         if (requisicao.user.role !== 'admin' && project.userId !== userId) {
             return resposta.status(403).json({ message: "Você não tem permissão para deletar este projeto." });
         }
 
-        // Registrar no histórico antes de excluir
+        
         await ProjectHistory.create({
             userId: userId,
             projectId: projectId,

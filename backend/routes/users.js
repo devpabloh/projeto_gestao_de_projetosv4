@@ -6,7 +6,6 @@ import { getAllUsers, updateUserRole, deleteUser } from '../controller/userContr
 
 const router = express.Router(); 
 
-// Rota para criar um usuário (existente)
 router.post('/', async (requisicao, resposta)=>{
     try{
         const {name, email, password, role} = requisicao.body 

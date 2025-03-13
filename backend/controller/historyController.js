@@ -1,9 +1,9 @@
 import { User, Project, ProjectHistory } from '../models/associations.js';
 
-// Get all project history records
+
 export async function getProjectHistory(requisicao, resposta) {
     try {
-        // Only admin users can access project history
+        
         if (requisicao.user.role !== 'admin') {
             return resposta.status(403).json({ message: "Acesso negado. Apenas administradores podem acessar o histórico." });
         }
@@ -26,12 +26,12 @@ export async function getProjectHistory(requisicao, resposta) {
     }
 }
 
-// Get history for a specific project
+
 export async function getProjectHistoryById(requisicao, resposta) {
     try {
         const projectId = requisicao.params.id;
         
-        // Check if user is admin or project owner
+        
         const project = await Project.findByPk(projectId);
         if (!project) {
             return resposta.status(404).json({ message: "Projeto não encontrado." });

@@ -4,10 +4,10 @@ import { getProjectHistory, getProjectHistoryById } from '../controller/historyC
 
 const router = express.Router();
 
-// Get all project history (admin only)
+
 router.get('/', authMiddleware, getProjectHistory);
 
-// Get history for a specific project
+
 router.get('/:id', authMiddleware, getProjectHistoryById);
 
 export default router;

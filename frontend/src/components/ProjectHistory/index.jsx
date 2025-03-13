@@ -109,12 +109,12 @@ const ProjectHistory = () => {
     };
 
     const filteredHistoryItems = historyItems.filter(item => {
-        // Filtrar por tipo de ação
+        
         if (filterOption !== 'all' && item.actionType !== filterOption) {
             return false;
         }
 
-        // Filtrar por termo de busca
+        
         const searchLower = searchTerm.toLowerCase();
         return (
             item.projectName.toLowerCase().includes(searchLower) ||

@@ -2,12 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 100vw;  /* Usa a largura total da viewport */
-  min-width: 100%;  /* Garante largura mínima de 100% */
+  width: 100vw;  
+  min-width: 100%;  
   background-color: var(--color-secondary);
   padding: 1rem;
   box-shadow: var(--shadow-primary);
-  position: fixed;  /* Fixa o header no topo */
+  position: fixed;  
   bottom: 0;
   left: 0;
   right: 0;

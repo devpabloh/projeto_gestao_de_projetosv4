@@ -78,7 +78,7 @@ const ProjectList = () => {
                 throw new Error('Falha ao atualizar o projeto');
             }
     
-            // Fetch the updated project from the server to get the latest data
+            
             const updatedResponse = await fetch(`http://localhost:3000/analiseDeProjetos/projects/${updatedProject.id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -91,11 +91,11 @@ const ProjectList = () => {
     
             const updatedProjectData = await updatedResponse.json();
             
-            // Update the projects list with the fresh data from the server
+
             setProjects(projects.map(project =>
                 project.id === updatedProjectData.id ? updatedProjectData : project));
             
-            // Refresh the entire projects list to ensure all data is up to date
+
             fetchProjects();
             
             setIsModalOpen(false);
@@ -107,7 +107,7 @@ const ProjectList = () => {
         }
     };
 
-    // Improved search logic
+    
     useEffect(() => {
         if (searchTerm.trim() === '') {
             setFilteredProjects(projects);
@@ -115,24 +115,24 @@ const ProjectList = () => {
             const searchTermLower = searchTerm.toLowerCase();
             
             const results = projects.filter(project => {
-                // If using the dropdown filter option
+                
                 if (filterOption !== 'all') {
                     const value = project[filterOption];
                     return value && 
-                           typeof value === 'string' && 
-                           value.toLowerCase().includes(searchTermLower);
+                        typeof value === 'string' && 
+                        value.toLowerCase().includes(searchTermLower);
                 } 
-                // Search across all relevant fields
+                
                 else {
                     return (
                         (project.projectName && 
-                         project.projectName.toLowerCase().includes(searchTermLower)) ||
+                        project.projectName.toLowerCase().includes(searchTermLower)) ||
                         (project.projectDescription && 
-                         project.projectDescription.toLowerCase().includes(searchTermLower)) ||
+                        project.projectDescription.toLowerCase().includes(searchTermLower)) ||
                         (project.developmentPhase && 
-                         project.developmentPhase.toLowerCase().includes(searchTermLower)) ||
+                        project.developmentPhase.toLowerCase().includes(searchTermLower)) ||
                         (project.responsibleFillingOut && 
-                         project.responsibleFillingOut.toLowerCase().includes(searchTermLower))
+                        project.responsibleFillingOut.toLowerCase().includes(searchTermLower))
                     );
                 }
             });
@@ -141,7 +141,7 @@ const ProjectList = () => {
         }
     }, [searchTerm, filterOption, projects]);
 
-    // Fetch projects function remains unchanged
+    
     const fetchProjects = async () => {
         try {
             const token = localStorage.getItem('token');

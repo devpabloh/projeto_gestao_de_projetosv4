@@ -15,7 +15,7 @@ export const errorHandler = (err, req, res, next) => {
         });
     }
 
-    // Adicione um log mais detalhado para erros desconhecidos
+    
     res.status(500).json({
         error: 'Erro interno do servidor',
         message: process.env.NODE_ENV === 'development' ? err.message : 'Erro desconhecido'
