@@ -11,7 +11,7 @@ export async function getProjectHistory(requisicao, resposta) {
         const history = await ProjectHistory.findAll({
             include: [
                 { model: User, attributes: ['id', 'name', 'email'] },
-                { model: Project, attributes: ['id', 'projectName'] }
+                { model: Project, attributes: ['id', 'projectName','responsibleFillingOut']}
             ],
             order: [['timestamp', 'DESC']]
         });

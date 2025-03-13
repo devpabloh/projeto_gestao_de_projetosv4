@@ -176,7 +176,7 @@ const ProjectHistory = () => {
                             
                             <div className={styles.cardDetails}>
                                 <p><strong>ID do Projeto:</strong> {item.projectId}</p>
-                                <p><strong>Responsável:</strong> {item.userName}</p>
+                                <p><strong>Responsável:</strong> {item.Project?.responsibleFillingOut || 'Não especificado'}</p>
                             </div>
                             
                             <div className={styles.viewDetails}>
