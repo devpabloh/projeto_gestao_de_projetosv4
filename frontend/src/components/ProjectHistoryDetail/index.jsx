@@ -35,6 +35,44 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
             return <p className={styles.noChanges}>Não há detalhes de alterações disponíveis.</p>;
         }
 
+        // Filtrar apenas os campos que realmente foram alterados
+        const changedFieldEntries = Object.entries(historyItem.changedFields).filter(([_, values]) => {
+            // Se não tem valor antigo, mas tem valor novo, é um campo que foi adicionado
+            if (!('old' in values) && 'new' in values && values.new !== null && values.new !== '') {
+                return true;
+            }
+            
+            // Se tem ambos os valores (antigo e novo), verificar se são diferentes
+            if ('old' in values && 'new' in values) {
+                // Melhor comparação para arrays
+                if (Array.isArray(values.old) && Array.isArray(values.new)) {
+                    // Verificar se os arrays têm o mesmo tamanho
+                    if (values.old.length !== values.new.length) {
+                        return true;
+                    }
+                    
+                    // Verificar se todos os elementos são iguais
+                    for (let i = 0; i < values.old.length; i++) {
+                        if (values.old[i] !== values.new[i]) {
+                            return true;
+                        }
+                    }
+                    
+                    // Arrays são iguais
+                    return false;
+                }
+                
+                // Para outros tipos de valores, comparação direta
+                return values.old !== values.new;
+            }
+            
+            return false;
+        });
+
+        if (changedFieldEntries.length === 0) {
+            return <p className={styles.noChanges}>Não foram detectadas alterações significativas.</p>;
+        }
+
         return (
             <div className={styles.changesTable}>
                 <table>
@@ -46,17 +84,24 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.entries(historyItem.changedFields).map(([field, values]) => (
-                            <tr key={field}>
-                                <td>{formatFieldName(field)}</td>
-                                <td className={styles.oldValue}>
-                                    {formatFieldValue(values.old)}
-                                </td>
-                                <td className={styles.newValue}>
-                                    {formatFieldValue(values.new)}
-                                </td>
-                            </tr>
-                        ))}
+                        {changedFieldEntries.map(([field, values]) => {
+                            // Verificar se é um campo novo (sem valor anterior)
+                            const isNewField = !values.old;
+                            
+                            return (
+                                <tr key={field}>
+                                    <td>{formatFieldName(field)}</td>
+                                    <td className={styles.oldValue}>
+                                        {isNewField ? 
+                                            <span className={styles.newFieldIndicator}>Campo novo</span> : 
+                                            formatFieldValue(values.old)}
+                                    </td>
+                                    <td className={styles.newValue}>
+                                        {formatFieldValue(values.new)}
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
@@ -146,22 +191,54 @@ const ProjectHistoryDetail = ({ historyItem, onClose }) => {
     };
 
     const formatFieldValue = (value) => {
-        if (value === null || value === undefined) {
+        // Remover o log de depuração
+        // console.log('Tipo do valor:', typeof value, 'Valor:', value);
+        
+        // Verificar se o valor é null, undefined ou uma string vazia
+        if (value === null || value === undefined || value === '') {
             return <span className={styles.nullValue}>Não informado</span>;
         }
 
+        // O resto da função permanece igual
         if (typeof value === 'boolean') {
             return value ? 'Sim' : 'Não';
         }
 
-        if (value instanceof Date) {
-            return formatDate(value);
+        // Melhor tratamento para datas
+        if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)) && value.includes('-'))) {
+            try {
+                return formatDate(value);
+            } catch (error) {
+                console.error('Erro ao formatar data:', error);
+                return String(value);
+            }
         }
 
+        // Tratamento para arrays
+        if (Array.isArray(value)) {
+            if (value.length === 0) {
+                return <span className={styles.nullValue}>Lista vazia</span>;
+            }
+            return (
+                <ul className={styles.arrayList}>
+                    {value.map((item, index) => (
+                        <li key={index}>{formatFieldValue(item)}</li>
+                    ))}
+                </ul>
+            );
+        }
+
+        // Tratamento para objetos
         if (typeof value === 'object') {
-            return <pre>{JSON.stringify(value, null, 2)}</pre>;
+            try {
+                return <pre className={styles.jsonValue}>{JSON.stringify(value, null, 2)}</pre>;
+            } catch (error) {
+                console.error('Erro ao converter objeto para string:', error);
+                return '[Objeto complexo]';
+            }
         }
 
+        // Para strings e números
         return String(value);
     };
 
