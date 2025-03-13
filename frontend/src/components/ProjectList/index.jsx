@@ -107,20 +107,41 @@ const ProjectList = () => {
         }
     };
 
+    // Improved search logic
     useEffect(() => {
         if (searchTerm.trim() === '') {
             setFilteredProjects(projects);
         } else {
+            const searchTermLower = searchTerm.toLowerCase();
+            
             const results = projects.filter(project => {
-                const value = project[filterOption];
-                return value && value.toLowerCase().includes(searchTerm.toLowerCase());
+                // If using the dropdown filter option
+                if (filterOption !== 'all') {
+                    const value = project[filterOption];
+                    return value && 
+                           typeof value === 'string' && 
+                           value.toLowerCase().includes(searchTermLower);
+                } 
+                // Search across all relevant fields
+                else {
+                    return (
+                        (project.projectName && 
+                         project.projectName.toLowerCase().includes(searchTermLower)) ||
+                        (project.projectDescription && 
+                         project.projectDescription.toLowerCase().includes(searchTermLower)) ||
+                        (project.developmentPhase && 
+                         project.developmentPhase.toLowerCase().includes(searchTermLower)) ||
+                        (project.responsibleFillingOut && 
+                         project.responsibleFillingOut.toLowerCase().includes(searchTermLower))
+                    );
+                }
             });
+            
             setFilteredProjects(results);
         }
     }, [searchTerm, filterOption, projects]);
 
-    
-    // Define fetchProjects outside useEffect so it can be called from anywhere in the component
+    // Fetch projects function remains unchanged
     const fetchProjects = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -143,12 +164,23 @@ const ProjectList = () => {
     };
     
     useEffect(() => {
-        fetchProjects(); // Load projects when component mounts
+        fetchProjects();
     }, []);
 
     return (
         <div className={styles.projectList}>
             <div className={styles.searchContainer}>
+                <select 
+                    value={filterOption}
+                    onChange={handleFilterChange}
+                    className={styles.filterSelect}
+                >
+                    <option value="all">Todos os campos</option>
+                    <option value="projectName">Nome do Projeto</option>
+                    <option value="projectDescription">Descrição</option>
+                    <option value="developmentPhase">Fase de desenvolvimento</option>
+                    <option value="responsibleFillingOut">Responsável</option>
+                </select>
                 <input 
                     type="text" 
                     placeholder='Pesquisar projetos...'
@@ -156,15 +188,7 @@ const ProjectList = () => {
                     onChange={handleSearch}
                     className={styles.searchInput} 
                 />
-                <select 
-                    value={filterOption}
-                    onChange={handleFilterChange}
-                    className={styles.filterSelect}
-                >
-                    <option value="projectName">Nome do Projeto</option>
-                    <option value="developmentPhase">Fase de desenvolvimento</option>
-                    <option value="responsibleFillingOut">Responsável</option>
-                </select>
+                
             </div>
             <h2>Lista de Projetos</h2>
             {isLoading ? (
