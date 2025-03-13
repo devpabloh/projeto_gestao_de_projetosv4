@@ -120,7 +120,8 @@ const ProjectHistory = () => {
             item.projectName.toLowerCase().includes(searchLower) ||
             item.userName.toLowerCase().includes(searchLower) ||
             item.user?.name?.toLowerCase().includes(searchLower) ||
-            String(item.projectId).includes(searchTerm)
+            String(item.projectId).includes(searchTerm) ||
+            item.Project?.responsibleFillingOut.toLowerCase().includes(searchLower)
         );
     });
 
