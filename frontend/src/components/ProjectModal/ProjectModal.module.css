@@ -23,8 +23,9 @@
 }
 
 .modalStyle{
+    position: relative;
     background-color: var(--color-tertiary);
-    padding: 20px;
+    padding: 40px;
     border-radius: 6px;
     max-width: 90vw;
     max-height: 90vh;
@@ -112,6 +113,34 @@
     min-height: 80px;
     padding: 10px;
     border-radius: 10px;
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--color-secondary);
+    width: 30px;
+    height: 30px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    
+    
+}
+
+.closeButton:hover {
+    background: none;
+    scale:none;
+    color: #666;
+    transition: color 0.4s ease;
+
 }
 
 @media (max-width: 720px) {

@@ -146,6 +146,13 @@ function ProjectModal({isOpen, isClose, onSave, project, readOnly, onEdit}){
     return(
         <div className={styles.overlayStyle} onClick={handleOverlayClick}>
             <div className={styles.modalStyle} ref={modalRef} onClick={(e) => e.stopPropagation()}>
+                <button
+                    className={styles.closeButton}
+                    onClick={isClose}
+                    aria-label="Fechar"
+                >
+                    &times;
+                </button>
 
                 <fieldset>
                     <legend>{project && project.id ? (readOnly ? 'Detalhes do projeto' : 'Editar Projeto') : 'Adicionar projeto'}</legend>
