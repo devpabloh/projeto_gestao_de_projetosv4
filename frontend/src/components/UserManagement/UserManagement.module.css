@@ -9,9 +9,8 @@
     margin-top: 1rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    overflow: hidden;
-    min-width: 100%;
-    table-layout: fixed;
+    overflow: hidden; 
+    table-layout: auto;
 }
 
 .userTable th,
@@ -37,6 +36,29 @@
 
 .userTable tr:hover {
     background-color: #f0f0f0;
+}
+
+.idColumn {
+    width: 1%; 
+    white-space: nowrap;
+}
+
+.nameColumn {
+    width: auto; 
+}
+
+.emailColumn {
+    width: auto; 
+}
+
+.roleColumn {
+    width: 1%; 
+    white-space: nowrap;
+}
+
+.actionsColumn {
+    width: 1%; 
+    white-space: nowrap;
 }
 
 .actions {
@@ -100,7 +122,21 @@
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
+
+
 /* Responsividade */
+
+@media(max-width:1024px){
+    .userManagement {
+        overflow-x: auto;
+    }
+
+    .userTable{
+        min-width: auto;
+    }
+
+    
+}
 
 @media (max-width: 768px) {
     .userTable {

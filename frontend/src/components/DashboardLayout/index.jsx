@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import styles from './DashboardLayout.module.css';
 
 
-import logoATI from '../../assets/logoATI.png';
+import logoATI from '../../assets/logo-ati-mono.png';
 
 
 import ProjectList from '../ProjectList/index.jsx';
@@ -140,7 +140,9 @@ function DashboardHome({ user }) {
         <div>
             <h2>Bem-vindo ao Sistema de Análise de Projetos, {user.name}!</h2>
             <p>Selecione uma opção no menu lateral para começar.</p>
-            <p>Seu papel no sistema: {user.role === 'admin' ? 'Administrador' : 'Usuário Comum'}</p>
+            {user.role === "admin" && (
+                <p>Tipo de perfil: Administrador</p>
+            )}
         </div>
     );
 }

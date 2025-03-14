@@ -77,11 +77,11 @@ function UserManagement({currentUser}){
             <table className={styles.userTable}>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Papel</th>
-                        <th>Ações</th>
+                        <th className={styles.idColumn}>ID</th>
+                        <th className={styles.nameColumn}>Nome</th>
+                        <th className={styles.emailColumn}>Email</th>
+                        <th className={styles.roleColumn}>Perfil</th>
+                        <th className={styles.actionsColumn}>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
