@@ -9,7 +9,7 @@
 }
 
 .sidebar {
-    width: 250px;
+    width: 220px;
     background-color: var(--color-secondary);
     color: white;
     padding: var(--padding-medium);
@@ -129,6 +129,16 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 900;
     display: none;
+}
+
+@media(max-width: 1024px) {
+    .sidebar {
+        width: 180px;
+    }
+
+    .containerNavegacao a {
+        padding: 0.6rem;
+    }
 }
 
 @media (max-width: 768px) {

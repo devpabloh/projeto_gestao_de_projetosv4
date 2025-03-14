@@ -129,6 +129,7 @@
 @media(max-width:1024px){
     .userManagement {
         overflow-x: auto;
+        padding: 0.5rem;
     }
 
     .userTable{

@@ -143,6 +143,34 @@
 
 }
 
+.scrollTopButton {
+    position: fixed;
+    bottom: 50px;
+    right: 180px;
+    width: 15px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.scrollTopButton:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+}
+
+.scrollTopButton:active {
+    transform: translateY(0);
+}
+
 @media (max-width: 720px) {
     .modalStyle {
         width: 85vw;
