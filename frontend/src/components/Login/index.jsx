@@ -4,12 +4,15 @@ import styles from './Login.module.css';
 import logoAti from '../../assets/logoAti.png';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleRegister = () => {
         navigate('/register');
@@ -40,6 +43,10 @@ function Login({ onLogin }) {
         }
     };
 
+    const togglePasswordVisibility = ()=>{
+        setShowPassword(!showPassword);
+    }
+
     return (
         <div className={styles.containerGeral}>
             <div className={styles.containerImagem}>
@@ -56,12 +63,21 @@ function Login({ onLogin }) {
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
                         />
-                        <input
-                            type="password"
-                            placeholder="Senha"
-                            value={password}
-                            onChange={(event) => setPassword(event.target.value)}
-                        />
+                        <div className={styles.passwordContainer}>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Senha"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+                            />
+                            <button
+                                type="button"
+                                className={styles.passwordToggle}
+                                onClick={togglePasswordVisibility}
+                            >
+                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            </button>
+                        </div>
                         <div className={styles.buttonContainer}>
                             <button type="submit">Entrar</button>
                             <button 

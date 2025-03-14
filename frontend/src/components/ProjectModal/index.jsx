@@ -54,6 +54,32 @@ function ProjectModal({isOpen, isClose, onSave, project, readOnly, onEdit}){
         additionalComments: "",
     })
 
+    const [showScrollTop, setShowScrollTop]= useState(false)
+
+    const scrollToTop = ()=>{
+        if(modalRef.current){
+            modalRef.current.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
+        }
+    }
+
+    const handleScroll = ()=>{
+        if(modalRef.current){
+            const scrollTop = modalRef.current.scrollTop
+            setShowScrollTop(scrollTop > 700)
+        }
+    }
+
+    useEffect(() => {
+        const modalElement = modalRef.current;
+        if (isOpen && modalElement) {
+            modalElement.addEventListener('scroll', handleScroll);
+            return () => modalElement.removeEventListener('scroll', handleScroll);
+        }
+    }, [isOpen]);
+
     useEffect(() => {
         if (project && project.id) {
             
@@ -141,11 +167,30 @@ function ProjectModal({isOpen, isClose, onSave, project, readOnly, onEdit}){
         onSave(formData)    
     }
 
+    
+
     if (!isOpen) return null;
 
     return(
         <div className={styles.overlayStyle} onClick={handleOverlayClick}>
             <div className={styles.modalStyle} ref={modalRef} onClick={(e) => e.stopPropagation()}>
+                <button
+                    className={styles.closeButton}
+                    onClick={isClose}
+                    aria-label="Fechar"
+                >
+                    &times;
+                </button>
+
+                {showScrollTop && (
+                    <button
+                        className={styles.scrollTopButton}
+                        onClick={scrollToTop}
+                        aria-label="Voltar ao topo"
+                    >
+                        ↑
+                    </button>
+                )}
 
                 <fieldset>
                     <legend>{project && project.id ? (readOnly ? 'Detalhes do projeto' : 'Editar Projeto') : 'Adicionar projeto'}</legend>

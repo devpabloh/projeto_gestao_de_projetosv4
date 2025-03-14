@@ -4,6 +4,7 @@
   --color-secondary:rgba(18, 18, 242, 0.9);
   --color-tertiary: #ffffff;
   --color-quaternary: #808080;
+  --color-error: #ff0000;
   --shadow-primary:0px 0px 10px rgba(0, 0, 0, 0.5);
   --padding-small:.8rem;
   --padding-medium:1.5rem;

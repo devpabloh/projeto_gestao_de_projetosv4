@@ -6,7 +6,7 @@ import '../models/associations.js';
 async function seed(){
   try {
     
-    await sequelize.sync({force: true});
+    await sequelize.sync({force: false});
 
     const passwordAdmin = await bcrypt.hash('senhaAdmin', 10);
     const passwordCommon = await bcrypt.hash('senhaComum', 10); 
