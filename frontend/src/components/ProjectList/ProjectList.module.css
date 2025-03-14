@@ -78,6 +78,34 @@
     color: #777;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.pageButton {
+    padding: 8px 12px;
+    margin: 0 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pageButton:hover {
+    background-color: #e0e0e0;
+}
+
+.activePage {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
 @media (max-width: 768px){
     .searchContainer{
         flex-direction: column;
@@ -85,5 +113,15 @@
 
     .projectGrid{
         grid-template-columns: 1fr;
+    }
+
+    .pagination {
+        margin-top: 15px;
+    }
+    
+    .pageButton {
+        padding: 6px 10px;
+        margin: 0 3px;
+        font-size: 14px;
     }
 }

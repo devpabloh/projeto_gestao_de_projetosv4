@@ -11,6 +11,14 @@ const ProjectList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [projectsPerPage] = useState(10);
+    
+    const indexOfLastProject = currentPage * projectsPerPage;
+    const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+    const currentProjects = filteredProjects.slice(indexOfFirstProject, indexOfLastProject); 
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
@@ -196,26 +204,40 @@ const ProjectList = () => {
             ) : filteredProjects.length === 0 ? (
                 <p>Nenhum projeto encontrado.</p>
             ) : (
-                <ul className={styles.projectGrid}>
-                    {filteredProjects.map(project => (
-                        <li 
-                            key={project.id}
-                            className={styles.projectCard}
-                            onClick={() => handleProjectClick(project)}
-                        >
-                            <h3>{project.projectName}</h3>
-                            <p className={styles.description}>
-                                {project.projectDescription}
-                            </p>
-                            <p className={styles.phase}>
-                                Fase: {project.developmentPhase}
-                            </p>
-                            <p className={styles.responsible}>
-                                Responsável: {project.responsibleFillingOut}
-                            </p>
-                        </li>
-                    ))}
-                </ul>
+                <>
+                    <ul className={styles.projectGrid}>
+                        {currentProjects.map(project => (
+                            <li
+                                key={project.id}
+                                className={styles.projectCard}
+                                onClick={() => handleProjectClick(project)}
+                            >
+                                <h3>{project.projectName}</h3>
+                                <p className={styles.description}>
+                                    {project.projectDescription}
+                                </p>
+                                <p className={styles.phase}>
+                                    Fase: {project.developmentPhase}
+                                </p>
+                                <p className={styles.responsible}>
+                                    Responsável: {project.responsibleFillingOut}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className={styles.pagination}>
+                        {Array.from({length: Math.ceil(filteredProjects.length / projectsPerPage)}, (_, index)=>(
+                            <button 
+                                key={index + 1} 
+                                onClick={()=> paginate(index + 1)} 
+                                className={`${styles.pageButton} ${currentPage === index + 1 ? styles.activePage : ''}`}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                    </div>
+                </>
+                
             )}
             {selectedProject && isModalOpen && (
                 <ProjectModal 
