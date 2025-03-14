@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ProjectHistory.module.css';
 import ProjectHistoryDetail from '../ProjectHistoryDetail';
+import ProjectModal from '../ProjectModal';
 
 const ProjectHistory = () => {
     const [historyItems, setHistoryItems] = useState([]);
@@ -11,7 +12,54 @@ const ProjectHistory = () => {
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterOption, setFilterOption] = useState('all');
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
     const navigate = useNavigate();
+
+    // Manter apenas esta versão da função handleHistoryItemClick (a assíncrona)
+    const handleHistoryItemClick = async (historyItem) => {
+        // Se for uma criação, tente buscar o projeto para mostrar no modal
+        if (historyItem.actionType === 'create') {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:3000/analiseDeProjetos/projects/${historyItem.projectId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const projectData = await response.json();
+                    setSelectedProject(projectData);
+                    setIsProjectModalOpen(true);
+                } else {
+                    // Se o projeto não existir mais, mostre os detalhes do histórico
+                    setSelectedHistory(historyItem);
+                    setIsDetailModalOpen(true);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar detalhes do projeto:', error);
+                // Em caso de erro, mostre os detalhes do histórico
+                setSelectedHistory(historyItem);
+                setIsDetailModalOpen(true);
+            }
+        } else {
+            // Para outros tipos de ação, mostre os detalhes do histórico
+            setSelectedHistory(historyItem);
+            setIsDetailModalOpen(true);
+        }
+    };
+
+    // Manter apenas esta versão da função handleCloseDetailModal
+    const handleCloseDetailModal = () => {
+        setIsDetailModalOpen(false);
+        setSelectedHistory(null);
+    };
+
+    const handleCloseProjectModal = () => {
+        setIsProjectModalOpen(false);
+        setSelectedProject(null);
+    };
 
     useEffect(() => {
         const fetchHistoryData = async () => {
@@ -53,15 +101,17 @@ const ProjectHistory = () => {
         fetchHistoryData();
     }, [navigate]);
 
-    const handleHistoryItemClick = (historyItem) => {
-        setSelectedHistory(historyItem);
-        setIsDetailModalOpen(true);
-    };
+    // REMOVER esta segunda definição da função handleHistoryItemClick
+    // const handleHistoryItemClick = (historyItem) => {
+    //     setSelectedHistory(historyItem);
+    //     setIsDetailModalOpen(true);
+    // };
 
-    const handleCloseDetailModal = () => {
-        setIsDetailModalOpen(false);
-        setSelectedHistory(null);
-    };
+    // REMOVER esta segunda definição da função handleCloseDetailModal
+    // const handleCloseDetailModal = () => {
+    //     setIsDetailModalOpen(false);
+    //     setSelectedHistory(null);
+    // };
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -192,6 +242,25 @@ const ProjectHistory = () => {
                 <ProjectHistoryDetail
                     historyItem={selectedHistory}
                     onClose={handleCloseDetailModal}
+                />
+            )}
+
+            {/* REMOVER este segundo ProjectHistoryDetail duplicado
+            {isDetailModalOpen && selectedHistory && (
+                <ProjectHistoryDetail
+                    historyItem={selectedHistory}
+                    onClose={handleCloseDetailModal}
+                />
+            )} */}
+
+            {isProjectModalOpen && selectedProject && (
+                <ProjectModal 
+                    isOpen={true}
+                    isClose={handleCloseProjectModal}
+                    onSave={() => {}} // Função vazia, pois será apenas visualização
+                    project={selectedProject}
+                    readOnly={true} // Sempre em modo somente leitura
+                    onEdit={() => {}} // Função vazia, pois não permitiremos edição
                 />
             )}
         </div>
