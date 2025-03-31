@@ -102,6 +102,10 @@
     width: 350px;
   }
 
+  .containerImagem img{
+    width: 350px;
+  }
+
   .containerLogin{
     width: 260px;
   }
@@ -123,6 +127,10 @@
     height: 200px;
     border-radius: 20px 20px  0 0;
     
+  }
+
+  .containerImagem img{
+    width: 250px;
   }
 
   .containerLogin{

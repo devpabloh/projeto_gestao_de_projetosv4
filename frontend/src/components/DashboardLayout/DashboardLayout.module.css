@@ -177,6 +177,10 @@
         width: 100%;
         padding-top: 70px;
     }
+
+    .containerLogo{
+        margin-top: 2rem;
+    }
 }
 
 @media (max-width: 320px) {
@@ -184,14 +188,9 @@
         flex-direction: column;
     }
     
-    .sidebar {
-        width: 100%;
-        left: -100%;
-    }
-    
     .sidebar.open {
         left: 0;
-        width: 80%;
+        width: 70%;
     }
     
     .header {
@@ -213,7 +212,16 @@
         margin-bottom: 0.5rem;
     }
 
+    .containerLogo{
+        margin-top: 1rem;
+    }
+
+    .containerLogo img{
+        width: 80%;
+    }
+
     .userInfo {
         padding: 1rem;
     }
+
 }
