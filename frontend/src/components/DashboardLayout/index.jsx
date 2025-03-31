@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import styles from './DashboardLayout.module.css';
 
 
-import logoATI from '../../assets/logo-ati-mono.png';
+import logoATI from '../../assets/logoGTD.png';
 
 
 import ProjectList from '../ProjectList/index.jsx';

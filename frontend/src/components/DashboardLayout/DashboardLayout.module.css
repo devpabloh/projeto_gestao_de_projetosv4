@@ -24,6 +24,12 @@
     text-align: center;
 }
 
+.containerLogo img{
+    width: 100%;
+    border-radius: 50%;
+    background-color: white;
+}
+
 .containerNavegacao ul {
     list-style: none;
     padding: 0;

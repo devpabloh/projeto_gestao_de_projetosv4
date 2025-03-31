@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types'; 
 import styles from './Login.module.css';
-import logoAti from '../../assets/logoAti.png';
+import logoAti from '../../assets/logoGTD.png';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
