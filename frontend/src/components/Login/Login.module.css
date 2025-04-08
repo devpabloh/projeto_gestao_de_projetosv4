@@ -134,8 +134,12 @@
   }
 
   .containerLogin{
-    width: 230px;
+    width: 300px;
     height: 300px;
+  }
+
+  ._containerForm_1dktc_81{
+    height: 500px;
   }
 
   .containerForm h2{
