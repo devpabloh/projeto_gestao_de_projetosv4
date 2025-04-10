@@ -171,7 +171,14 @@
     transform: translateY(0);
 }
 
-@media (max-width: 720px) {
+@media (max-width: 320px) {
+    .closeButton{
+        top: 30px;
+        left: 210px;
+    }
+}
+
+@media (max-width: 768px) {
     .modalStyle {
         width: 85vw;
         padding: 8px;
@@ -179,5 +186,10 @@
     
     .modalStyle fieldset {
         padding: 8px;
+    }
+
+    .closeButton{
+        top: 25px;
+        left: 590px;
     }
 }
